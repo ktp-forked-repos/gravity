@@ -40,7 +40,7 @@ class MyVector {
 
     /**
      * Returns a new vector that equals this vector multiplied by a specified scalar.
-     * @param scalar
+     * @param scalar the scale factor
      * @return the new scaled vector
      */
     MyVector scale(double scalar) {
@@ -99,4 +99,3 @@ class MyVector {
 
 
 }
-
