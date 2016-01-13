@@ -18,6 +18,7 @@ class MyVector {
      * @return the magnitude of this vector
      */
     double getMagnitude() {
+        calculateMagnitude();
         return magnitude;
     }
 
@@ -85,6 +86,10 @@ class MyVector {
         magnitude = Math.sqrt(x * x + y * y);
     }
 
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+
     /**
      * Constructor
      * @param x the x component
@@ -93,6 +98,16 @@ class MyVector {
     MyVector(double x, double y) {
         this.x = x;
         this.y = y;
+
+        calculateMagnitude();
+    }
+
+    /**
+     * Default constructor
+     */
+    MyVector() {
+        x = 0;
+        y = 0;
 
         calculateMagnitude();
     }
