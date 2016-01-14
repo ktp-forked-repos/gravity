@@ -95,10 +95,9 @@ public class Body {
      * noticeable error. ie, orbits are not consistent over time. The longer the simulation runs, the more the inaccuracies
      * pile up.
      *
-     * @param t the surrent time
      * @param dt the small timestep to the next frame
      */
-    void step(double t, double dt) {
+    void step(double dt) {
 
         Derivative a, b, c, d;
 
@@ -110,21 +109,21 @@ public class Body {
         a.dv = calculateAcceleration(Main.system);
 
         // b contains dx/dt and dv/dt at time t = t0 + 0.5dt based on the derivatives found for a
-        b = evaluate(t, dt * 0.5, a);
+        b = evaluate(dt * 0.5, a);
 
         // c contains dx/dt and dv/dt at time t = t0 + 0.5dt based on the derivatives found for b
-        c = evaluate(t, dt * 0.5, b);
+        c = evaluate(dt * 0.5, b);
 
         // d contains dx/dt and dv/d at time t = t0 + dt based on the derivatives found for c
-        d = evaluate(t, dt, c);
+        d = evaluate(dt, c);
 
         /**
          * These formulas combine the derivatives found in a, b, c, and d to get a good weighted estimate for the
          * actual derivatives dx/dt and dv/dt. Not perfect, but closer than Euler's method
          */
         MyVector dxdt = new MyVector();
-        dxdt.x = 1.0 / 6.0 * (a.dx.x + 2.0 * (d.dx.x + c.dx.x) + d.dx.x);
-        dxdt.y = 1.0 / 6.0 * (a.dx.y + 2.0 * (d.dx.y + c.dx.y) + d.dx.y);
+        dxdt.x = 1 / 6.0 * (a.dx.x + 2.0 * (d.dx.x + c.dx.x) + d.dx.x);
+        dxdt.y = 1 / 6.0 * (a.dx.y + 2.0 * (d.dx.y + c.dx.y) + d.dx.y);
 
         MyVector dvdt = new MyVector();
         dvdt.x = 1.0 / 6.0 * (a.dv.x + 2.0 * (d.dv.x + c.dv.x) + d.dv.x);
@@ -135,15 +134,23 @@ public class Body {
         velocity = velocity.add(dvdt.scale(dt));
     }
 
-    Derivative evaluate(double t, double dt, Derivative d) {
+
+    /**
+     * A method to evaluate dx/dt and dv/dt after a timestep dt based on current values for dx/dt and dv/dt
+     * @param dt small timestep
+     * @param d current values of dx/dt and dv/dt
+     * @return the new derivatives dx/dt and dv/dt
+     */
+    Derivative evaluate(double dt, Derivative d) {
+
         MyVector tempPosition = new MyVector(position.x, position.y);
         MyVector tempVelocity = new MyVector(velocity.x, velocity.y);
+
         position.x += d.dx.x * dt;
         position.y += d.dx.y * dt;
 
-
-        position.x += d.dv.x * dt;
-        position.y += d.dv.y * dt;
+        velocity.x += d.dv.x * dt;
+        velocity.y += d.dv.y * dt;
 
         Derivative output = new Derivative();
         output.dx = new MyVector(velocity.x, velocity.y);
@@ -155,6 +162,9 @@ public class Body {
         return output;
     }
 
+    /**
+     * Class to hold values of dx/dt and dv/dt in both x and y directions. This exists for convenience.
+     */
     class Derivative {
 
         MyVector dx, dv;

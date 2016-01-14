@@ -45,18 +45,19 @@ public class Main extends Application {
          */
         Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
         Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
-        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
+//        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
+//        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
 
 
         planet.velocity = new MyVector(13, 0);
-        otherPlanet.velocity = new MyVector(-25, 0);
-        eccentric.velocity = new MyVector(3, -7);
+//        otherPlanet.velocity = new MyVector(-25, 0);
+//        eccentric.velocity = new MyVector(3, -7);
 
         system.addBody(planet);
         system.addBody(sun);
-        system.addBody(otherPlanet);
-        system.addBody(eccentric);
+//        system.addBody(otherPlanet);
+//        system.addBody(eccentric);
+        sun.isFixed = true;
 
         /**
          * Simple harmonic oscillator. Note that the amplitude increases due to the inherent error of RK4
@@ -121,7 +122,7 @@ public class Main extends Application {
                 for (Body body : system.getBodies()) {
                     gc.setFill(body.color);
                     if (!body.isFixed) {
-                        body.step(t, 0.1);
+                        body.step(0.1);
                     }
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
                 }
