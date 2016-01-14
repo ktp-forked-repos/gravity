@@ -43,36 +43,34 @@ public class Main extends Application {
         /**
          * A fun, varied system
          */
-        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
-        Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
-        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
-
-
-        planet.velocity = new MyVector(13, 0);
-        otherPlanet.velocity = new MyVector(-25, 0);
-        eccentric.velocity = new MyVector(3, -7);
-
-        system.addBody(planet);
-        system.addBody(sun);
-        system.addBody(otherPlanet);
-        system.addBody(eccentric);
+//        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
+//        Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
+//        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
+//        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
+//
+//
+//        planet.velocity = new MyVector(13, 0);
+//        otherPlanet.velocity = new MyVector(-25, 0);
+//        eccentric.velocity = new MyVector(3, -7);
+//
+//        system.addBody(planet);
+//        system.addBody(sun);
+//        system.addBody(otherPlanet);
+//        system.addBody(eccentric);
 
         /**
          * Simple harmonic oscillator. Note that the amplitude decreases due to the inherent error of RK4
          */
-//        Body one = new Body(10000, new MyVector(600, 500), Color.BLACK);
-//        Body two = new Body(10000, new MyVector(900, 500), Color.BLACK);
-//        one.isFixed = true;
-//        two.isFixed = true;
-//
-//        Body oscillator = new Body(50, new MyVector(750, 100), Color.BLUE);
-//
-//        system.addBody(one);
-//        system.addBody(two);
-//        system.addBody(oscillator);
+        Body one = new Body(10000, new MyVector(600, 500), Color.BLACK);
+        Body two = new Body(10000, new MyVector(900, 500), Color.BLACK);
+        one.isFixed = true;
+        two.isFixed = true;
 
-        system.totalEnergy = system.getTotalEnergy();
+        Body oscillator = new Body(50, new MyVector(750, 100), Color.BLUE);
+
+        system.addBody(one);
+        system.addBody(two);
+        system.addBody(oscillator);
 
         launch(args);
     }
@@ -109,22 +107,17 @@ public class Main extends Application {
                 /**
                  * Uncomment this to only display current object positions.
                  */
-//              gc.clearRect(0, 0, W, H);
+              gc.clearRect(0, 0, W, H);
 
                 /**
                  * The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                  */
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
-
-                double totalEnergy = 0;
                 /**
                  * Loop over each body in the system, step its position forward by dt, and draw it.
                  */
                 for (Body body : system.getBodies()) {
-
-                    totalEnergy += body.calculateGravitationalPotential(system) / 2;
-                    totalEnergy += body.getKineticEnergy();
 
                     gc.setFill(body.color);
                     if (!body.isFixed) {
@@ -133,7 +126,7 @@ public class Main extends Application {
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
                 }
 
-                stage.setTitle("" + (int)totalEnergy);
+                stage.setTitle("" + (int)system.getTotalEnergy());
 
                 prevT = t;
 
