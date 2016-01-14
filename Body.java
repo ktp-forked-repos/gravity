@@ -153,12 +153,12 @@ public class Body {
          * direction. The simulation performs much more realistically with this factor.
          */
         MyVector dxdt = new MyVector();
-        dxdt.x = 1.37 / 8.0 * (a.dx.x + 3.0 * (d.dx.x + c.dx.x) + d.dx.x);
-        dxdt.y = 1.37 / 8.0 * (a.dx.y + 3.0 * (d.dx.y + c.dx.y) + d.dx.y);
+        dxdt.x = Main.system.CORRECTION_FACTOR / 8.0 * (a.dx.x + 3.0 * (d.dx.x + c.dx.x) + d.dx.x);
+        dxdt.y = Main.system.CORRECTION_FACTOR / 8.0 * (a.dx.y + 3.0 * (d.dx.y + c.dx.y) + d.dx.y);
 
         MyVector dvdt = new MyVector();
-        dvdt.x = 1.37 / 8.0 * (a.dv.x + 3.0 * (d.dv.x + c.dv.x) + d.dv.x);
-        dvdt.y = 1.37 / 8.0 * (a.dv.y + 3.0 * (d.dv.y + c.dv.y) + d.dv.y);
+        dvdt.x = Main.system.CORRECTION_FACTOR / 8.0 * (a.dv.x + 3.0 * (d.dv.x + c.dv.x) + d.dv.x);
+        dvdt.y = Main.system.CORRECTION_FACTOR / 8.0 * (a.dv.y + 3.0 * (d.dv.y + c.dv.y) + d.dv.y);
 
         // Finally, update the current position and velocity
         position = position.add(dxdt.scale(dt));
