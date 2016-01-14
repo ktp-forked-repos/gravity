@@ -43,35 +43,35 @@ public class Main extends Application {
         /**
          * A fun, varied system
          */
-        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
-        Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
+//        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
+//        Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
 //        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
 //        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
-
-
-        planet.velocity = new MyVector(13, 0);
+//
+//
+//        planet.velocity = new MyVector(13, 0);
 //        otherPlanet.velocity = new MyVector(-25, 0);
 //        eccentric.velocity = new MyVector(3, -7);
-
-        system.addBody(planet);
-        system.addBody(sun);
+//
+//        system.addBody(planet);
+//        system.addBody(sun);
 //        system.addBody(otherPlanet);
 //        system.addBody(eccentric);
-        sun.isFixed = true;
+//        sun.isFixed = true;
 
         /**
-         * Simple harmonic oscillator. Note that the amplitude increases due to the inherent error of RK4
+         * Simple harmonic oscillator. Note that the amplitude decreases due to the inherent error of RK4
          */
-//        Body one = new Body(10000, new MyVector(600, 500), Color.BLACK);
-//        Body two = new Body(10000, new MyVector(900, 500), Color.BLACK);
-//        one.isFixed = true;
-//        two.isFixed = true;
-//
-//        Body oscillator = new Body(50, new MyVector(750, 100), Color.BLUE);
-//
-//        system.addBody(one);
-//        system.addBody(two);
-//        system.addBody(oscillator);
+        Body one = new Body(10000, new MyVector(600, 500), Color.BLACK);
+        Body two = new Body(10000, new MyVector(900, 500), Color.BLACK);
+        one.isFixed = true;
+        two.isFixed = true;
+
+        Body oscillator = new Body(50, new MyVector(750, 100), Color.BLUE);
+
+        system.addBody(one);
+        system.addBody(two);
+        system.addBody(oscillator);
 
         launch(args);
     }
@@ -108,7 +108,7 @@ public class Main extends Application {
                 /**
                  * Uncomment this to only display current object positions.
                  */
-//              gc.clearRect(0, 0, W, H);
+              gc.clearRect(0, 0, W, H);
 
                 /**
                  * The timestamp of the current frame in seconds, with t=0 at currentNanoTime

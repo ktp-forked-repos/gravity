@@ -143,19 +143,28 @@ public class Body {
      */
     Derivative evaluate(double dt, Derivative d) {
 
+        // Temp storage for position and velocity
         MyVector tempPosition = new MyVector(position.x, position.y);
         MyVector tempVelocity = new MyVector(velocity.x, velocity.y);
 
-        position.x += d.dx.x * dt;
-        position.y += d.dx.y * dt;
-
+        // Update velocity based on dv
         velocity.x += d.dv.x * dt;
         velocity.y += d.dv.y * dt;
 
+        // Update position based on dx
+        position.x += d.dx.x * dt;
+        position.y += d.dx.y * dt;
+
+
+
+        // Make the output have dx equal to the new velocity
         Derivative output = new Derivative();
         output.dx = new MyVector(velocity.x, velocity.y);
+
+        // And dv equal to the new acceleration due to gravity
         output.dv = calculateAcceleration(Main.system);
 
+        //Restore the old position and velocity
         position = new MyVector(tempPosition.x, tempPosition.y);
         velocity = new MyVector(tempVelocity.x, tempVelocity.y);
 
