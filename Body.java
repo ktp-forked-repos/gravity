@@ -21,6 +21,7 @@ public class Body {
     MyVector acceleration;
     public Paint color;
     public int radius;
+    boolean isFixed;
 
 
     /**
@@ -33,6 +34,7 @@ public class Body {
         this.mass = mass;
         this.position = position;
         this.color = color;
+        this.isFixed = false;
 
         /**
          * v0 and a0 are initialized as zero. v0 can be set manually after creating the body object

@@ -39,25 +39,38 @@ public class Main extends Application {
 
         system = new GravitySystem();
 
-        /**
-         * All of the bodies in the system
-         */
-        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
-        Body sun = new Body(500, new MyVector(750, 500), Color.BLACK);
-        Body otherPlanet = new Body(10, new MyVector(750, 700), Color.RED);
-        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
 
         /**
-         * Initial velocities of bodies.
+         * A fun, varied system
          */
+        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
+        Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
+        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
+        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
+
+
         planet.velocity = new MyVector(13, 0);
         otherPlanet.velocity = new MyVector(-25, 0);
-        eccentric.velocity = new MyVector(0, -5);
+        eccentric.velocity = new MyVector(3, -7);
 
         system.addBody(planet);
         system.addBody(sun);
         system.addBody(otherPlanet);
         system.addBody(eccentric);
+
+        /**
+         * Simple harmonic oscillator. Note that the amplitude increases due to the inherent error of RK4
+         */
+//        Body one = new Body(10000, new MyVector(600, 500), Color.BLACK);
+//        Body two = new Body(10000, new MyVector(900, 500), Color.BLACK);
+//        one.isFixed = true;
+//        two.isFixed = true;
+//
+//        Body oscillator = new Body(50, new MyVector(750, 100), Color.BLUE);
+//
+//        system.addBody(one);
+//        system.addBody(two);
+//        system.addBody(oscillator);
 
         launch(args);
     }
@@ -107,8 +120,10 @@ public class Main extends Application {
                  */
                 for (Body body : system.getBodies()) {
                     gc.setFill(body.color);
-                    body.step(t, 0.1);
-                    gc.fillOval(body.position.x, body.position.y, 2 * body.radius, 2 * body.radius);
+                    if (!body.isFixed) {
+                        body.step(t, 0.1);
+                    }
+                    gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
                 }
 
                 prevT = t;
