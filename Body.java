@@ -90,6 +90,34 @@ public class Body {
     }
 
     /**
+     * Method that calculates the gravitational potential energy of this body.
+     * @param system the universe
+     * @return the gravitational potential
+     */
+    public double calculateGravitationalPotential(GravitySystem system) {
+        double netPotential = 0;
+
+        for (Body otherBody : system.getBodies()) {
+            if (!this.equals(otherBody)) {
+
+                double r = getVectorTo(otherBody).getMagnitude();
+
+                netPotential += system.G * otherBody.mass / r;
+            }
+        }
+
+        return netPotential * mass;
+    }
+
+    /**
+     * Method that calculates the kinetic energy of this body
+     * @return the kinetic energy
+     */
+    public double getKineticEnergy() {
+        return 0.5 * mass * velocity.getMagnitude() * velocity.getMagnitude();
+    }
+
+    /**
      * The method to update the position of this body based on the current time and some small dt. It uses a 4th order
      * Runge-Kutta approximation to minimize error from the numerical approximation of an integral. It still gives very
      * noticeable error. ie, orbits are not consistent over time. The longer the simulation runs, the more the inaccuracies
@@ -135,6 +163,8 @@ public class Body {
         // Finally, update the current position and velocity
         position = position.add(dxdt.scale(dt));
         velocity = velocity.add(dvdt.scale(dt));
+
+
     }
 
 

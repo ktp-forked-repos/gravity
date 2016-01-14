@@ -19,6 +19,11 @@ public class GravitySystem {
     final double G = 100;
 
     /**
+     *
+     */
+    double totalEnergy = 0;
+
+    /**
      * Constructor
      */
     GravitySystem() {
@@ -39,6 +44,17 @@ public class GravitySystem {
      */
     public ArrayList<Body> getBodies() {
         return bodies;
+    }
+
+    double getTotalEnergy() {
+        double totalEnergy = 0;
+
+        for (Body body : getBodies()) {
+            totalEnergy += body.calculateGravitationalPotential(this) / 2;
+            totalEnergy += body.getKineticEnergy();
+        }
+
+        return totalEnergy;
     }
 
 

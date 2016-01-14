@@ -56,8 +56,7 @@ public class Main extends Application {
         system.addBody(planet);
         system.addBody(sun);
         system.addBody(otherPlanet);
-//        system.addBody(eccentric);
-        sun.isFixed = true;
+        system.addBody(eccentric);
 
         /**
          * Simple harmonic oscillator. Note that the amplitude decreases due to the inherent error of RK4
@@ -72,6 +71,8 @@ public class Main extends Application {
 //        system.addBody(one);
 //        system.addBody(two);
 //        system.addBody(oscillator);
+
+        system.totalEnergy = system.getTotalEnergy();
 
         launch(args);
     }
@@ -116,16 +117,23 @@ public class Main extends Application {
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
 
+                double totalEnergy = 0;
                 /**
                  * Loop over each body in the system, step its position forward by dt, and draw it.
                  */
                 for (Body body : system.getBodies()) {
+
+                    totalEnergy += body.calculateGravitationalPotential(system) / 2;
+                    totalEnergy += body.getKineticEnergy();
+
                     gc.setFill(body.color);
                     if (!body.isFixed) {
                         body.step(0.1);
                     }
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
                 }
+
+                stage.setTitle("" + (int)totalEnergy);
 
                 prevT = t;
 
