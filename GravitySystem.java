@@ -21,7 +21,7 @@ public class GravitySystem {
     /**
      * An artificial correction factor that seems to counteract the systematic error of RK4
      */
-    final double CORRECTION_FACTOR = 1.37;
+    final double CORRECTION_FACTOR = 1.0;
 
     /**
      * Constructor

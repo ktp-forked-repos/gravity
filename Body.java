@@ -106,7 +106,7 @@ public class Body {
             }
         }
 
-        return netPotential * mass;
+        return -1 * netPotential * mass;
     }
 
     /**
