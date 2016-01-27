@@ -8,20 +8,16 @@ import java.util.ArrayList;
  */
 public class GravitySystem {
 
-    /**
-     * The bodies in this system.
-     */
+    //The bodies in this system.
     private ArrayList<Body> bodies;
 
-    /**
-     * The value of the gravitational constant in the simulated universe.
-     */
+    //The value of the gravitational constant in the simulated universe.
     final double G = 100;
 
     /**
      * An artificial correction factor that seems to counteract the systematic error of RK4
      */
-    final double CORRECTION_FACTOR = 1.0;
+    final double CORRECTION_FACTOR = 1.37;
 
     /**
      * Constructor

@@ -15,20 +15,14 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    /**
-     * The width and height of the window.
-     */
+    //The width and height of the window.
     public static final double W = 1500;
     public static final double H = 1000;
 
-    /**
-     * The system in which bodies are stored. This is essentially the simulation universe
-     */
+    //The system in which bodies are stored. This is essentially the simulation universe
     public static GravitySystem system;
 
-    /**
-     * A variable to store the timestamp of the last frame. Useful for variable dt based on calculation time.
-     */
+    //A variable to store the timestamp of the last frame. Useful for variable dt based on calculation time.
     public static double prevT = 0;
 
     /**
@@ -55,8 +49,8 @@ public class Main extends Application {
 
         system.addBody(planet);
         system.addBody(sun);
-        system.addBody(otherPlanet);
-        system.addBody(eccentric);
+//        system.addBody(otherPlanet);
+//        system.addBody(eccentric);
 //        sun.isFixed = true;
 
         /**
@@ -82,9 +76,7 @@ public class Main extends Application {
      */
     public void start(Stage stage) {
 
-        /**
-         * JavaFX stuff for window name, size, etc
-         */
+        //JavaFX stuff for window name, size, etc
         stage.setTitle("Gravity2D");
         Group root = new Group();
         Scene scene = new Scene(root);
@@ -93,31 +85,21 @@ public class Main extends Application {
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        /**
-         * The start time of the simulation
-         */
+        //The start time of the simulation
         final long startNanoTime = System.nanoTime();
 
 
-        /**
-         * The simulation loop!
-         */
+        //The simulation loop!
         AnimationTimer timer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
 
-                /**
-                 * Uncomment this to only display current object positions.
-                 */
+                //Uncomment this to only display current object positions
 //              gc.clearRect(0, 0, W, H);
 
-                /**
-                 * The timestamp of the current frame in seconds, with t=0 at currentNanoTime
-                 */
+                // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
-                /**
-                 * Loop over each body in the system, step its position forward by dt, and draw it.
-                 */
+                //Loop over each body in the system, step its position forward by dt, and draw it.
                 for (Body body : system.getBodies()) {
 
                     gc.setFill(body.color);

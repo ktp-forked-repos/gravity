@@ -36,15 +36,12 @@ public class Body {
         this.color = color;
         this.isFixed = false;
 
-        /**
-         * v0 and a0 are initialized as zero. v0 can be set manually after creating the body object
-         */
+        // v0 and a0 are initialized as zero. v0 can be set manually after creating the body object
         velocity = new MyVector(0, 0);
         acceleration = new MyVector(0, 0);
 
-        /**
-         * The radius is proportional to the square root of the mass by default. It can also be adjusted manually.
-         */
+
+        // The radius is proportional to the square root of the mass by default. It can also be adjusted manually.
         radius = (int)Math.sqrt(mass);
     }
 
@@ -65,9 +62,7 @@ public class Body {
     private MyVector calculateAcceleration(GravitySystem system) {
         MyVector netForce = new MyVector(0, 0);
 
-        /**
-         * Start out by summing all the forces using Fg = GMm/r^2
-         */
+        //Start out by summing all the forces using Fg = GMm/r^2
         for (Body otherBody : system.getBodies()) {
             if (!this.equals(otherBody)) {
 
