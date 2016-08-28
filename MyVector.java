@@ -23,23 +23,6 @@ class MyVector {
     }
 
     /**
-     * Calculates the dot product of this vector with another specified vector.
-     * @param v the other vector
-     * @return the dot product
-     */
-    double dot(MyVector v) {
-        return (x * v.x + y * v.y);
-    }
-
-    /**
-     * Return a new vector perpendicular to this one, counterclockwise.
-     * @return the perpendicular vector
-     */
-    MyVector perp() {
-        return new MyVector(- 1 * y, x);
-    }
-
-    /**
      * Returns a new vector that equals this vector multiplied by a specified scalar.
      * @param scalar the scale factor
      * @return the new scaled vector

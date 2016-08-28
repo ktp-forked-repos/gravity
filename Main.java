@@ -16,8 +16,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     //The width and height of the window.
-    public static final double W = 1500;
-    public static final double H = 1000;
+    public static final double WIDTH = 1500;
+    public static final double HEIGHT = 1000;
 
     //The system in which bodies are stored. This is essentially the simulation universe
     public static GravitySystem system;
@@ -49,9 +49,8 @@ public class Main extends Application {
 
         system.addBody(planet);
         system.addBody(sun);
-//        system.addBody(otherPlanet);
-//        system.addBody(eccentric);
-//        sun.isFixed = true;
+        system.addBody(otherPlanet);
+        system.addBody(eccentric);
 
         /**
          * Simple harmonic oscillator. Note that the amplitude decreases due to the inherent error of RK4
@@ -77,11 +76,11 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         //JavaFX stuff for window name, size, etc
-        stage.setTitle("Gravity2D");
+        stage.setTitle("Gravity");
         Group root = new Group();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        Canvas canvas = new Canvas(W, H);
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -94,7 +93,7 @@ public class Main extends Application {
             public void handle(long currentNanoTime) {
 
                 //Uncomment this to only display current object positions
-//              gc.clearRect(0, 0, W, H);
+                gc.clearRect(0, 0, WIDTH, HEIGHT);
 
                 // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
@@ -102,15 +101,11 @@ public class Main extends Application {
                 //Loop over each body in the system, step its position forward by dt, and draw it.
                 for (Body body : system.getBodies()) {
 
+                    body.step(0.5);
+
                     gc.setFill(body.color);
-                    if (!body.isFixed) {
-                        body.step(0.1);
-                    }
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
                 }
-
-                stage.setTitle("" + (int)system.getTotalEnergy());
-
                 prevT = t;
 
             }
