@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 /**
  * The main class that displays the window in which stuff occurs. Uses JavaFX for display.
  * @author Kiran Tomlinson
@@ -22,7 +24,7 @@ public class Gravity extends Application {
     public static double HEIGHT;
 
     //The system in which bodies are stored. This is essentially the simulation universe
-    public static System system;
+    public static GravitySystem system;
 
     //A variable to store the timestamp of the last frame.
     public static double prevT = 0;
@@ -34,7 +36,7 @@ public class Gravity extends Application {
     public static void main(String[] args) {
 
 
-        system = new System();
+        system = new GravitySystem();
 
 
         /**
@@ -42,17 +44,17 @@ public class Gravity extends Application {
          */
         Body planet = new Body(30, new Vector(950, 100), Color.BLUE);
         Body sun = new Body(1000, new Vector(950, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new Vector(950, 700), Color.RED);
+        Body otherPlanet = new Body(30, new Vector(950, 900), Color.RED);
         Body eccentric = new Body(5, new Vector(300, 500), Color.GRAY);
 
 
-        planet.velocity = new Vector(13, 0);
-        otherPlanet.velocity = new Vector(-25, 0);
-        eccentric.velocity = new Vector(3, -7);
+//        planet.velocity = new Vector(10, 0);
+//        otherPlanet.velocity = new Vector(-10, 0);
+//        eccentric.velocity = new Vector(5, -5);
 
+        system.addBody(otherPlanet);
         system.addBody(planet);
         system.addBody(sun);
-        system.addBody(otherPlanet);
         system.addBody(eccentric);
 
 
@@ -98,14 +100,41 @@ public class Gravity extends Application {
                 // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
-                //Loop over each body in the system, step its position forward by dt, and draw it.
+                // List of merged objects
+                ArrayList<Body> merged = new ArrayList<>();
+
+                // Resolve collisions
                 for (Body body : system.getBodies()) {
+                    for (Body otherBody : system.getBodies()) {
+                        if (body.equals(otherBody)) continue;
 
-                    body.step(0.5);
+                        // Check if two bodies are colliding
+                        if (body.isTouching(otherBody) && !merged.contains(body) && !merged.contains(otherBody)) {
 
+                            // If they are, merge them. Keep the larger one
+                            if (body.mass > otherBody.mass) {
+                                body.collide(otherBody);
+                                merged.add(otherBody);
+                            } else {
+                                otherBody.collide(body);
+                                merged.add(body);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Remove merged bodies
+                system.getBodies().removeAll(merged);
+
+                //Loop over each body in the system, move it, and draw it
+                for (Body body : system.getBodies()) {
+                    body.step(0.2);
                     gc.setFill(body.color);
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
+
                 }
+
                 prevT = t;
 
             }
