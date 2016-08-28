@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  * The main class that displays the window in which stuff occurs. Uses JavaFX for display.
  * @author Kiran Tomlinson
  */
-public class Main extends Application {
+public class Gravity extends Application {
 
     //The width and height of the window.
     public static double WIDTH;
@@ -24,11 +24,11 @@ public class Main extends Application {
     //The system in which bodies are stored. This is essentially the simulation universe
     public static GravitySystem system;
 
-    //A variable to store the timestamp of the last frame. Useful for variable dt based on calculation time.
+    //A variable to store the timestamp of the last frame.
     public static double prevT = 0;
 
     /**
-     * Main method.
+     * Gravity method.
      * @param args
      */
     public static void main(String[] args) {

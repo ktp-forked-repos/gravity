@@ -96,7 +96,7 @@ public class Body {
         a = new Derivative();
         a.dx.x = velocity.x;
         a.dx.y = velocity.y;
-        a.dv = calculateAcceleration(Main.system);
+        a.dv = calculateAcceleration(Gravity.system);
 
         // b contains dx/dt and dv/dt at time t = t0 + 0.5dt based on the derivatives found for a
         b = evaluate(dt * 0.5, a);
@@ -154,7 +154,7 @@ public class Body {
         output.dx = new MyVector(velocity.x, velocity.y);
 
         // And dv equal to the new acceleration due to gravity
-        output.dv = calculateAcceleration(Main.system);
+        output.dv = calculateAcceleration(Gravity.system);
 
         //Restore the old position and velocity
         position = new MyVector(tempPosition.x, tempPosition.y);

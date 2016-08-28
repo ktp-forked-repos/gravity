@@ -69,6 +69,10 @@ class MyVector {
         magnitude = Math.sqrt(x * x + y * y);
     }
 
+    /**
+     * Generate a pretty string that represents the vector
+     * @return a pretty string
+     */
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
