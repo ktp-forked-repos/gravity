@@ -1,4 +1,4 @@
-package gravity2d;
+package gravity;
 
 import javafx.scene.paint.Paint;
 

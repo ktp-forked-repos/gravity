@@ -1,4 +1,4 @@
-package gravity2d;
+package gravity;
 
 /**
  * A class to store and manipulate vectors. This can be used for velocity, position, force, acceleration, anything.

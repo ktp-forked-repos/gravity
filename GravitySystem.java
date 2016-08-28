@@ -1,4 +1,4 @@
-package gravity2d;
+package gravity;
 
 import java.util.ArrayList;
 
