@@ -21,7 +21,6 @@ public class Body {
     MyVector acceleration;
     public Paint color;
     public int radius;
-    boolean isFixed;
 
 
     /**
@@ -34,7 +33,6 @@ public class Body {
         this.mass = mass;
         this.position = position;
         this.color = color;
-        this.isFixed = false;
 
         // v0 and a0 are initialized as zero. v0 can be set manually after creating the body object
         velocity = new MyVector(0, 0);
@@ -111,10 +109,7 @@ public class Body {
 
         /**
          * These formulas combine the derivatives found in a, b, c, and d to get a good weighted estimate for the
-         * actual derivatives dx/dt and dv/dt. Not perfect, but closer than Euler's method
-         *
-         * I have added a multiplicative factor of 1.37 based on empirical evidence that the error is consistenly in one
-         * direction. The simulation performs much more realistically with this factor.
+         * actual derivatives dx/dt and dv/dt.
          */
         MyVector dxdt = new MyVector();
         dxdt.x = (a.dx.x + 2.0 * (b.dx.x + c.dx.x) + d.dx.x) / 6.0;
@@ -169,7 +164,7 @@ public class Body {
     }
 
     /**
-     * Class to hold values of dx/dt and dv/dt in both x and y directions. This exists for convenience.
+     * Class to hold values of dx/dt and dv/dt in both x and y directions.
      */
     class Derivative {
 

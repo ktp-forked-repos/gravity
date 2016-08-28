@@ -18,7 +18,7 @@ public class GravitySystem {
      * Constructor
      */
     GravitySystem() {
-        bodies = new ArrayList<Body>();
+        bodies = new ArrayList<>();
     }
 
     /**
