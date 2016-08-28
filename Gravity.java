@@ -11,11 +11,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 /**
  * The main class that displays the window in which stuff occurs. Uses JavaFX for display.
  * @author Kiran Tomlinson
  */
-public class Main extends Application {
+public class Gravity extends Application {
 
     //The width and height of the window.
     public static double WIDTH;
@@ -24,11 +26,11 @@ public class Main extends Application {
     //The system in which bodies are stored. This is essentially the simulation universe
     public static GravitySystem system;
 
-    //A variable to store the timestamp of the last frame. Useful for variable dt based on calculation time.
+    //A variable to store the timestamp of the last frame.
     public static double prevT = 0;
 
     /**
-     * Main method.
+     * Gravity method.
      * @param args
      */
     public static void main(String[] args) {
@@ -40,19 +42,19 @@ public class Main extends Application {
         /**
          * Sample system
          */
-        Body planet = new Body(30, new MyVector(950, 100), Color.BLUE);
-        Body sun = new Body(1000, new MyVector(950, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new MyVector(950, 700), Color.RED);
-        Body eccentric = new Body(5, new MyVector(300, 500), Color.GRAY);
+        Body planet = new Body(30, new Vector(950, 100), Color.BLUE);
+        Body sun = new Body(1000, new Vector(950, 500), Color.BLACK);
+        Body otherPlanet = new Body(20, new Vector(950, 700), Color.RED);
+        Body eccentric = new Body(15, new Vector(400, 500), Color.GRAY);
 
 
-        planet.velocity = new MyVector(13, 0);
-        otherPlanet.velocity = new MyVector(-25, 0);
-        eccentric.velocity = new MyVector(3, -7);
+        planet.velocity = new Vector(10, 0);
+        otherPlanet.velocity = new Vector(-20, 0);
+        eccentric.velocity = new Vector(5, -10);
 
+        system.addBody(otherPlanet);
         system.addBody(planet);
         system.addBody(sun);
-        system.addBody(otherPlanet);
         system.addBody(eccentric);
 
 
@@ -85,7 +87,7 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         //The start time of the simulation
-        final long startNanoTime = System.nanoTime();
+        final long startNanoTime = java.lang.System.nanoTime();
 
 
         //The simulation loop!
@@ -98,14 +100,41 @@ public class Main extends Application {
                 // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
-                //Loop over each body in the system, step its position forward by dt, and draw it.
+                // List of merged objects
+                ArrayList<Body> merged = new ArrayList<>();
+
+                // Resolve collisions
                 for (Body body : system.getBodies()) {
+                    for (Body otherBody : system.getBodies()) {
+                        if (body.equals(otherBody)) continue;
 
-                    body.step(0.5);
+                        // Check if two bodies are colliding
+                        if (body.isTouching(otherBody) && !merged.contains(body) && !merged.contains(otherBody)) {
 
+                            // If they are, merge them. Keep the larger one
+                            if (body.mass > otherBody.mass) {
+                                body.collide(otherBody);
+                                merged.add(otherBody);
+                            } else {
+                                otherBody.collide(body);
+                                merged.add(body);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Remove merged bodies
+                system.getBodies().removeAll(merged);
+
+                //Loop over each body in the system, move it, and draw it
+                for (Body body : system.getBodies()) {
+                    body.step(0.4);
                     gc.setFill(body.color);
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
+
                 }
+
                 prevT = t;
 
             }

@@ -2,9 +2,10 @@ package gravity;
 
 /**
  * A class to store and manipulate vectors. This can be used for velocity, position, force, acceleration, anything.
+ *
  * @author Kiran Tomlinson
  */
-class MyVector {
+class Vector {
 
     /**
      * Instance variables for x, y components and magnitude.
@@ -27,17 +28,17 @@ class MyVector {
      * @param scalar the scale factor
      * @return the new scaled vector
      */
-    MyVector scale(double scalar) {
-        return new MyVector(x * scalar, y * scalar);
+    Vector scale(double scalar) {
+        return new Vector(x * scalar, y * scalar);
     }
 
     /**
      * Returns a new unit vector in the direction of this vector.
      * @return the unit vector
      */
-    MyVector normalize() {
+    Vector normalize() {
         if (magnitude > 0) {
-            return new MyVector(x / magnitude, y / magnitude);
+            return new Vector(x / magnitude, y / magnitude);
         }
 
         return null;
@@ -49,8 +50,8 @@ class MyVector {
      * @param v the other vector
      * @return the sum of the two vectors
      */
-    MyVector add(MyVector v) {
-        return new MyVector(x + v.x, y + v.y);
+    Vector add(Vector v) {
+        return new Vector(x + v.x, y + v.y);
     }
 
     /**
@@ -58,8 +59,8 @@ class MyVector {
      * @param v the other vector
      * @return the subtraction this - v
      */
-    MyVector subtract(MyVector v) {
-        return new MyVector(x - v.x, y - v.y);
+    Vector subtract(Vector v) {
+        return new Vector(x - v.x, y - v.y);
     }
 
     /**
@@ -69,6 +70,10 @@ class MyVector {
         magnitude = Math.sqrt(x * x + y * y);
     }
 
+    /**
+     * Generate a pretty string that represents the vector
+     * @return a pretty string
+     */
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
@@ -78,7 +83,7 @@ class MyVector {
      * @param x the x component
      * @param y the y component
      */
-    MyVector(double x, double y) {
+    Vector(double x, double y) {
         this.x = x;
         this.y = y;
 
@@ -88,7 +93,7 @@ class MyVector {
     /**
      * Default constructor
      */
-    MyVector() {
+    Vector() {
         x = 0;
         y = 0;
 

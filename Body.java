@@ -1,6 +1,6 @@
 package gravity;
 
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 
 /**
  * Created by Kiran Tomlinson on 1/12/16.
@@ -16,10 +16,10 @@ public class Body {
      * Instance variables: all the information about this body
      */
     int mass;
-    MyVector position;
-    MyVector velocity;
-    MyVector acceleration;
-    public Paint color;
+    Vector position;
+    Vector velocity;
+    Vector acceleration;
+    public Color color;
     public int radius;
 
 
@@ -29,14 +29,14 @@ public class Body {
      * @param position
      * @param color
      */
-    Body(int mass, MyVector position, Paint color) {
+    Body(int mass, Vector position, Color color) {
         this.mass = mass;
         this.position = position;
         this.color = color;
 
         // v0 and a0 are initialized as zero. v0 can be set manually after creating the body object
-        velocity = new MyVector(0, 0);
-        acceleration = new MyVector(0, 0);
+        velocity = new Vector(0, 0);
+        acceleration = new Vector(0, 0);
 
 
         // The radius is proportional to the square root of the mass by default. It can also be adjusted manually.
@@ -44,11 +44,38 @@ public class Body {
     }
 
     /**
+     * Detect if this body is touching another body
+     * @param body the other one
+     * @return true if touching, else false
+     */
+    public boolean isTouching(Body body) {
+        return getVectorTo(body).getMagnitude() - radius - body.radius < 0;
+    }
+
+
+    /**
+     * Resolve a collision with another body using conservation of momentum
+     * @param body
+     */
+    public void collide(Body body) {
+        Vector momentum1 = velocity.scale(mass);
+        Vector momentum2 = body.velocity.scale(body.mass);
+        Vector totalMomentum = momentum1.add(momentum2);
+
+        mass += body.mass;
+        velocity = totalMomentum.scale(1.0 / mass);
+        radius = (int)Math.sqrt(mass);
+    }
+
+
+
+
+    /**
      * Helper method to get a vector pointing from this body to another.
      * @param otherBody
      * @return the vector this -----> otherBody
      */
-    private MyVector getVectorTo(Body otherBody) {
+    private Vector getVectorTo(Body otherBody) {
         return otherBody.position.subtract(position);
     }
 
@@ -57,25 +84,24 @@ public class Body {
      * @param system the Universe
      * @return the net acceleration vector
      */
-    private MyVector calculateAcceleration(GravitySystem system) {
-        MyVector netAcceleration = new MyVector(0, 0);
+    private Vector calculateAcceleration(GravitySystem system) {
+        Vector netAcceleration = new Vector(0, 0);
 
         //Start out by summing all the forces using Fg = GMm/r^2
         for (Body otherBody : system.getBodies()) {
-            if (!this.equals(otherBody)) {
+            if (this.equals(otherBody)) continue;
 
-                // The distance from this to otherBody
-                double r = getVectorTo(otherBody).getMagnitude();
+            // The distance from this to otherBody
+            double r = getVectorTo(otherBody).getMagnitude();
 
-                // Here it is! The magnitude of the acceleration of gravity
-                double magnitude = system.G * otherBody.mass / (r * r);
+            // Here it is! The magnitude of the acceleration of gravity
+            double magnitude = system.G * otherBody.mass / (r * r);
 
-                // The force points directly towards otherBody, so we can just scale the vector that points to it.
-                MyVector acceleration = getVectorTo(otherBody).normalize().scale(magnitude);
+            // The force points directly towards otherBody, so we can just scale the vector that points to it.
+            Vector acceleration = getVectorTo(otherBody).normalize().scale(magnitude);
 
-                // Add this force to the running total of net force
-                netAcceleration = netAcceleration.add(acceleration);
-            }
+            // Add this force to the running total of net force
+            netAcceleration = netAcceleration.add(acceleration);
         }
 
         return netAcceleration;
@@ -96,7 +122,7 @@ public class Body {
         a = new Derivative();
         a.dx.x = velocity.x;
         a.dx.y = velocity.y;
-        a.dv = calculateAcceleration(Main.system);
+        a.dv = calculateAcceleration(Gravity.system);
 
         // b contains dx/dt and dv/dt at time t = t0 + 0.5dt based on the derivatives found for a
         b = evaluate(dt * 0.5, a);
@@ -111,11 +137,11 @@ public class Body {
          * These formulas combine the derivatives found in a, b, c, and d to get a good weighted estimate for the
          * actual derivatives dx/dt and dv/dt.
          */
-        MyVector dxdt = new MyVector();
+        Vector dxdt = new Vector();
         dxdt.x = (a.dx.x + 2.0 * (b.dx.x + c.dx.x) + d.dx.x) / 6.0;
         dxdt.y = (a.dx.y + 2.0 * (b.dx.y + c.dx.y) + d.dx.y) / 6.0;
 
-        MyVector dvdt = new MyVector();
+        Vector dvdt = new Vector();
         dvdt.x = (a.dv.x + 2.0 * (b.dv.x + c.dv.x) + d.dv.x) / 6.0;
         dvdt.y = (a.dv.y + 2.0 * (b.dv.y + c.dv.y) + d.dv.y) / 6.0;
 
@@ -136,8 +162,8 @@ public class Body {
     Derivative evaluate(double dt, Derivative d) {
 
         // Temp storage for position and velocity
-        MyVector tempPosition = new MyVector(position.x, position.y);
-        MyVector tempVelocity = new MyVector(velocity.x, velocity.y);
+        Vector tempPosition = new Vector(position.x, position.y);
+        Vector tempVelocity = new Vector(velocity.x, velocity.y);
 
         // Update velocity based on dv
         velocity.x += d.dv.x * dt;
@@ -151,28 +177,29 @@ public class Body {
 
         // Make the output have dx equal to the new velocity
         Derivative output = new Derivative();
-        output.dx = new MyVector(velocity.x, velocity.y);
+        output.dx = new Vector(velocity.x, velocity.y);
 
         // And dv equal to the new acceleration due to gravity
-        output.dv = calculateAcceleration(Main.system);
+        output.dv = calculateAcceleration(Gravity.system);
 
         //Restore the old position and velocity
-        position = new MyVector(tempPosition.x, tempPosition.y);
-        velocity = new MyVector(tempVelocity.x, tempVelocity.y);
+        position = new Vector(tempPosition.x, tempPosition.y);
+        velocity = new Vector(tempVelocity.x, tempVelocity.y);
 
         return output;
     }
+
 
     /**
      * Class to hold values of dx/dt and dv/dt in both x and y directions.
      */
     class Derivative {
 
-        MyVector dx, dv;
+        Vector dx, dv;
 
         Derivative() {
-            dx = new MyVector();
-            dx = new MyVector();
+            dx = new Vector();
+            dx = new Vector();
 
         }
     }
