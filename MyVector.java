@@ -2,7 +2,7 @@ package gravity;
 
 /**
  * A class to store and manipulate vectors. This can be used for velocity, position, force, acceleration, anything.
- * @author kiran
+ * @author Kiran Tomlinson
  */
 class MyVector {
 

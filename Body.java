@@ -3,7 +3,7 @@ package gravity;
 import javafx.scene.paint.Paint;
 
 /**
- * Created by kiran on 1/12/16.
+ * Created by Kiran Tomlinson on 1/12/16.
  * Thanks to Glenn Fiedler from gafferongames.com for the informative guide on RK4 integration.
  * http://gafferongames.com/game-physics/integration-basics/
  *
