@@ -22,7 +22,7 @@ public class Gravity extends Application {
     public static double HEIGHT;
 
     //The system in which bodies are stored. This is essentially the simulation universe
-    public static GravitySystem system;
+    public static System system;
 
     //A variable to store the timestamp of the last frame.
     public static double prevT = 0;
@@ -34,21 +34,21 @@ public class Gravity extends Application {
     public static void main(String[] args) {
 
 
-        system = new GravitySystem();
+        system = new System();
 
 
         /**
          * Sample system
          */
-        Body planet = new Body(30, new MyVector(950, 100), Color.BLUE);
-        Body sun = new Body(1000, new MyVector(950, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new MyVector(950, 700), Color.RED);
-        Body eccentric = new Body(5, new MyVector(300, 500), Color.GRAY);
+        Body planet = new Body(30, new Vector(950, 100), Color.BLUE);
+        Body sun = new Body(1000, new Vector(950, 500), Color.BLACK);
+        Body otherPlanet = new Body(20, new Vector(950, 700), Color.RED);
+        Body eccentric = new Body(5, new Vector(300, 500), Color.GRAY);
 
 
-        planet.velocity = new MyVector(13, 0);
-        otherPlanet.velocity = new MyVector(-25, 0);
-        eccentric.velocity = new MyVector(3, -7);
+        planet.velocity = new Vector(13, 0);
+        otherPlanet.velocity = new Vector(-25, 0);
+        eccentric.velocity = new Vector(3, -7);
 
         system.addBody(planet);
         system.addBody(sun);
@@ -85,7 +85,7 @@ public class Gravity extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         //The start time of the simulation
-        final long startNanoTime = System.nanoTime();
+        final long startNanoTime = java.lang.System.nanoTime();
 
 
         //The simulation loop!
