@@ -3,7 +3,7 @@ package gravity;
 import java.util.ArrayList;
 
 /**
- * Created by kiran on 1/12/16.
+ * Created by Kiran Tomlinson on 1/12/16.
  * A class to hold bodies. The GravitySystem represents the simulated universe.
  */
 public class GravitySystem {

@@ -2,22 +2,24 @@ package gravity;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
  * The main class that displays the window in which stuff occurs. Uses JavaFX for display.
- * @author kiran
+ * @author Kiran Tomlinson
  */
 public class Main extends Application {
 
     //The width and height of the window.
-    public static final double WIDTH = 1500;
-    public static final double HEIGHT = 1000;
+    public static double WIDTH;
+    public static double HEIGHT;
 
     //The system in which bodies are stored. This is essentially the simulation universe
     public static GravitySystem system;
@@ -31,16 +33,17 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
 
+
         system = new GravitySystem();
 
 
         /**
-         * A fun, varied system
+         * Sample system
          */
-        Body planet = new Body(30, new MyVector(750, 100), Color.BLUE);
-        Body sun = new Body(1000, new MyVector(750, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new MyVector(750, 700), Color.RED);
-        Body eccentric = new Body(5, new MyVector(100, 500), Color.GRAY);
+        Body planet = new Body(30, new MyVector(950, 100), Color.BLUE);
+        Body sun = new Body(1000, new MyVector(950, 500), Color.BLACK);
+        Body otherPlanet = new Body(20, new MyVector(950, 700), Color.RED);
+        Body eccentric = new Body(5, new MyVector(300, 500), Color.GRAY);
 
 
         planet.velocity = new MyVector(13, 0);
@@ -52,19 +55,6 @@ public class Main extends Application {
         system.addBody(otherPlanet);
         system.addBody(eccentric);
 
-        /**
-         * Simple harmonic oscillator. Note that the amplitude decreases due to the inherent error of RK4
-         */
-//        Body one = new Body(10000, new MyVector(600, 500), Color.BLACK);
-//        Body two = new Body(10000, new MyVector(900, 500), Color.BLACK);
-//        one.isFixed = true;
-//        two.isFixed = true;
-//
-//        Body oscillator = new Body(50, new MyVector(750, 100), Color.BLUE);
-//
-//        system.addBody(one);
-//        system.addBody(two);
-//        system.addBody(oscillator);
 
         launch(args);
     }
@@ -74,6 +64,16 @@ public class Main extends Application {
      * @param stage
      */
     public void start(Stage stage) {
+
+        // Get screen dimensions, and set window size appropriately
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        WIDTH = screenBounds.getWidth();
+        HEIGHT = screenBounds.getHeight();
+        stage.setX(screenBounds.getMinX());
+        stage.setY(screenBounds.getMinY());
+        stage.setWidth(WIDTH);
+        stage.setHeight(HEIGHT);
+        stage.setResizable(false);
 
         //JavaFX stuff for window name, size, etc
         stage.setTitle("Gravity");
