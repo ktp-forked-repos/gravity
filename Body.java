@@ -60,7 +60,7 @@ public class Body {
      * @return the net acceleration vector
      */
     private MyVector calculateAcceleration(GravitySystem system) {
-        MyVector netForce = new MyVector(0, 0);
+        MyVector netAcceleration = new MyVector(0, 0);
 
         //Start out by summing all the forces using Fg = GMm/r^2
         for (Body otherBody : system.getBodies()) {
@@ -69,54 +69,23 @@ public class Body {
                 // The distance from this to otherBody
                 double r = getVectorTo(otherBody).getMagnitude();
 
-                // Here it is! The magnitude of the force of gravity
-                double forceMagnitude = system.G * mass * otherBody.mass / (r * r);
+                // Here it is! The magnitude of the acceleration of gravity
+                double magnitude = system.G * otherBody.mass / (r * r);
 
                 // The force points directly towards otherBody, so we can just scale the vector that points to it.
-                MyVector force = getVectorTo(otherBody).normalize().scale(forceMagnitude);
+                MyVector acceleration = getVectorTo(otherBody).normalize().scale(magnitude);
 
                 // Add this force to the running total of net force
-                netForce = netForce.add(force);
+                netAcceleration = netAcceleration.add(acceleration);
             }
         }
 
-        // F = ma, so divide force by mass to get net acceleration
-        return netForce.scale(1.0 / mass);
-    }
-
-    /**
-     * Method that calculates the gravitational potential energy of this body.
-     * @param system the universe
-     * @return the gravitational potential
-     */
-    public double calculateGravitationalPotential(GravitySystem system) {
-        double netPotential = 0;
-
-        for (Body otherBody : system.getBodies()) {
-            if (!this.equals(otherBody)) {
-
-                double r = getVectorTo(otherBody).getMagnitude();
-
-                netPotential += system.G * otherBody.mass / r;
-            }
-        }
-
-        return -1 * netPotential * mass;
-    }
-
-    /**
-     * Method that calculates the kinetic energy of this body
-     * @return the kinetic energy
-     */
-    public double getKineticEnergy() {
-        return 0.5 * mass * velocity.getMagnitude() * velocity.getMagnitude();
+        return netAcceleration;
     }
 
     /**
      * The method to update the position of this body based on the current time and some small dt. It uses a 4th order
-     * Runge-Kutta approximation to minimize error from the numerical approximation of an integral. It still gives very
-     * noticeable error. ie, orbits are not consistent over time. The longer the simulation runs, the more the inaccuracies
-     * pile up.
+     * Runge-Kutta approximation to minimize error from the numerical approximation of an integral.
      *
      * @param dt the small timestep to the next frame
      */
@@ -148,12 +117,12 @@ public class Body {
          * direction. The simulation performs much more realistically with this factor.
          */
         MyVector dxdt = new MyVector();
-        dxdt.x = Main.system.CORRECTION_FACTOR / 8.0 * (a.dx.x + 3.0 * (d.dx.x + c.dx.x) + d.dx.x);
-        dxdt.y = Main.system.CORRECTION_FACTOR / 8.0 * (a.dx.y + 3.0 * (d.dx.y + c.dx.y) + d.dx.y);
+        dxdt.x = (a.dx.x + 2.0 * (b.dx.x + c.dx.x) + d.dx.x) / 6.0;
+        dxdt.y = (a.dx.y + 2.0 * (b.dx.y + c.dx.y) + d.dx.y) / 6.0;
 
         MyVector dvdt = new MyVector();
-        dvdt.x = Main.system.CORRECTION_FACTOR / 8.0 * (a.dv.x + 3.0 * (d.dv.x + c.dv.x) + d.dv.x);
-        dvdt.y = Main.system.CORRECTION_FACTOR / 8.0 * (a.dv.y + 3.0 * (d.dv.y + c.dv.y) + d.dv.y);
+        dvdt.x = (a.dv.x + 2.0 * (b.dv.x + c.dv.x) + d.dv.x) / 6.0;
+        dvdt.y = (a.dv.y + 2.0 * (b.dv.y + c.dv.y) + d.dv.y) / 6.0;
 
         // Finally, update the current position and velocity
         position = position.add(dxdt.scale(dt));

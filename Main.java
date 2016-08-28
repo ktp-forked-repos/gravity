@@ -77,7 +77,7 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         //JavaFX stuff for window name, size, etc
-        stage.setTitle("Gravity2D");
+        stage.setTitle("Gravity");
         Group root = new Group();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -94,7 +94,7 @@ public class Main extends Application {
             public void handle(long currentNanoTime) {
 
                 //Uncomment this to only display current object positions
-//              gc.clearRect(0, 0, W, H);
+                gc.clearRect(0, 0, W, H);
 
                 // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
@@ -108,9 +108,6 @@ public class Main extends Application {
                     }
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
                 }
-
-                stage.setTitle("" + (int)system.getTotalEnergy());
-
                 prevT = t;
 
             }
