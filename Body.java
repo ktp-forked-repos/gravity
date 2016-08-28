@@ -38,9 +38,7 @@ public class Body {
         velocity = new Vector(0, 0);
         acceleration = new Vector(0, 0);
 
-
-        // The radius is proportional to the square root of the mass by default. It can also be adjusted manually.
-        radius = (int)Math.sqrt(mass);
+        updateRadius();
     }
 
     /**
@@ -64,9 +62,15 @@ public class Body {
 
         mass += body.mass;
         velocity = totalMomentum.scale(1.0 / mass);
-        radius = (int)Math.sqrt(mass);
+        updateRadius();
     }
 
+    /**
+     * The radius is proportional to the square root of the mass by default. It can also be adjusted manually.
+     */
+    private void updateRadius() {
+        radius = (int)Math.sqrt(mass) + 5;
+    }
 
 
 

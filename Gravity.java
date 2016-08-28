@@ -44,7 +44,7 @@ public class Gravity extends Application {
          */
         Body planet = new Body(30, new Vector(950, 100), Color.BLUE);
         Body sun = new Body(1000, new Vector(950, 500), Color.BLACK);
-        Body otherPlanet = new Body(20, new Vector(950, 700), Color.RED);
+        Body otherPlanet = new Body(40, new Vector(950, 700), Color.RED);
         Body eccentric = new Body(15, new Vector(400, 500), Color.GRAY);
 
 
@@ -129,7 +129,7 @@ public class Gravity extends Application {
 
                 //Loop over each body in the system, move it, and draw it
                 for (Body body : system.getBodies()) {
-                    body.step(0.4);
+                    body.step(0.3);
                     gc.setFill(body.color);
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
 
