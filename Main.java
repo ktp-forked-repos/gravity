@@ -101,7 +101,7 @@ public class Main extends Application {
                 //Loop over each body in the system, step its position forward by dt, and draw it.
                 for (Body body : system.getBodies()) {
 
-                    body.step(0.1);
+                    body.step(0.5);
 
                     gc.setFill(body.color);
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
