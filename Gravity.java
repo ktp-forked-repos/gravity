@@ -12,6 +12,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * The main class that displays the window in which stuff occurs. Uses JavaFX for display.
@@ -39,24 +40,17 @@ public class Gravity extends Application {
         system = new GravitySystem();
 
 
-        /**
-         * Sample system
-         */
-        Body planet = new Body(30, new Vector(950, 100), Color.BLUE);
-        Body sun = new Body(1000, new Vector(950, 500), Color.BLACK);
-        Body otherPlanet = new Body(40, new Vector(950, 700), Color.RED);
-        Body eccentric = new Body(15, new Vector(400, 500), Color.GRAY);
-
-
-        planet.velocity = new Vector(10, 0);
-        otherPlanet.velocity = new Vector(-20, 0);
-        eccentric.velocity = new Vector(5, -10);
-
-        system.addBody(otherPlanet);
-        system.addBody(planet);
+        // The sun
+        Body sun = new Body(3000, new Vector(950, 500), Color.WHITE);
         system.addBody(sun);
-        system.addBody(eccentric);
 
+        // Random planets
+        Random rand = new Random();
+        for (int i = 0; i < 100; i++) {
+            Body planet = new Body(5 + rand.nextInt(50), new Vector(rand.nextInt(2000), rand.nextInt(1000)), Color.rgb(rand.nextInt(200) + 55, rand.nextInt(200) + 55, rand.nextInt(200) + 55));
+            planet.velocity = new Vector(rand.nextInt(100) - 50, rand.nextInt(100) - 50);
+            system.addBody(planet);
+        }
 
         launch(args);
     }
@@ -94,8 +88,9 @@ public class Gravity extends Application {
         AnimationTimer timer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
 
-                //Uncomment this to only display current object positions
-                gc.clearRect(0, 0, WIDTH, HEIGHT);
+                // Clear screen
+                gc.setFill(Color.BLACK);
+                gc.fillRect(0, 0, WIDTH, HEIGHT);
 
                 // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
@@ -129,7 +124,7 @@ public class Gravity extends Application {
 
                 //Loop over each body in the system, move it, and draw it
                 for (Body body : system.getBodies()) {
-                    body.step(0.3);
+                    body.step(0.1);
                     gc.setFill(body.color);
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
 

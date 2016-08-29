@@ -69,7 +69,7 @@ public class Body {
      * The radius is proportional to the square root of the mass by default. It can also be adjusted manually.
      */
     private void updateRadius() {
-        radius = (int)Math.sqrt(mass) + 5;
+        radius = (int)Math.sqrt(mass);
     }
 
 
