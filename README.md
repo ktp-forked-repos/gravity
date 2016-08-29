@@ -23,6 +23,9 @@ Want to help? Here's how:
 
 * **Kiran Tomlinson**
 
+## Acknowledgements
+* Thanks to Glenn Fiedler of [Gaffer on Games](http://gafferongames.com/game-physics/integration-basics/) for the excellent tutorial on RK4
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE)
