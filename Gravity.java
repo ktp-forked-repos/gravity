@@ -173,7 +173,6 @@ public class Gravity extends Application {
      * @param timer
      */
     private void togglePaused(AnimationTimer timer) {
-        System.out.println("hello");
         if (paused) {
             paused = false;
             timer.start();
