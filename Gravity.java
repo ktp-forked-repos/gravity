@@ -40,18 +40,6 @@ public class Gravity extends Application {
         system = new GravitySystem();
 
 
-        // The sun
-        Body sun = new Body(3000, new Vector(950, 500), Color.WHITE);
-        system.addBody(sun);
-
-        // Random planets
-        Random rand = new Random();
-        for (int i = 0; i < 100; i++) {
-            Body planet = new Body(5 + rand.nextInt(50), new Vector(rand.nextInt(2000), rand.nextInt(1000)), Color.rgb(rand.nextInt(200) + 55, rand.nextInt(200) + 55, rand.nextInt(200) + 55));
-            planet.velocity = new Vector(rand.nextInt(100) - 50, rand.nextInt(100) - 50);
-            system.addBody(planet);
-        }
-
         launch(args);
     }
 
@@ -79,6 +67,15 @@ public class Gravity extends Application {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        // Random planets
+        Random rand = new Random();
+        for (int i = 0; i < 200; i++) {
+            Body planet = new Body(5 + rand.nextInt(20), new Vector(rand.nextInt((int)WIDTH), rand.nextInt((int)HEIGHT)), Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
+            planet.velocity = new Vector(rand.nextInt(50) - 25, rand.nextInt(50) - 25);
+            system.addBody(planet);
+        }
+
 
         //The start time of the simulation
         final long startNanoTime = java.lang.System.nanoTime();
