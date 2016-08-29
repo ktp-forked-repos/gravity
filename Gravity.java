@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -28,7 +29,9 @@ public class Gravity extends Application {
     public static GravitySystem system;
 
     //A variable to store the timestamp of the last frame.
-    public static double prevT = 0;
+    static double prevT = 0;
+
+    static boolean drawTrails = false;
 
     /**
      * Gravity method.
@@ -63,6 +66,7 @@ public class Gravity extends Application {
         stage.setTitle("Gravity");
         Group root = new Group();
         Scene scene = new Scene(root);
+        scene.setFill(Color.BLACK);
         stage.setScene(scene);
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
@@ -86,8 +90,10 @@ public class Gravity extends Application {
             public void handle(long currentNanoTime) {
 
                 // Clear screen
-                gc.setFill(Color.BLACK);
-                gc.fillRect(0, 0, WIDTH, HEIGHT);
+                if (!drawTrails) {
+                    gc.clearRect(0, 0, WIDTH, HEIGHT);
+                }
+
 
                 // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
                 double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
@@ -133,8 +139,14 @@ public class Gravity extends Application {
         };
 
         timer.start();
-
         stage.show();
+
+        // Event handlers
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.SPACE) {
+                drawTrails = !drawTrails;
+            }
+        });
 
     }
 
