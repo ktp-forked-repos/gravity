@@ -1,0 +1,11 @@
+#instructions {
+    -fx-font-family: "Avenir", sans-serif;
+    -fx-font-size: 1.8em;
+    -fx-fill: white;
+}
+
+#root {
+    -fx-background-color: black;
+    -fx-padding: 20px 40px 0px 20px;
+}
+

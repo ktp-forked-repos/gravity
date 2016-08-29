@@ -2,13 +2,14 @@ package gravity;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -32,6 +33,7 @@ public class Gravity extends Application {
     static double prevT = 0;
 
     static boolean drawTrails = false;
+    static boolean paused = false;
 
     /**
      * Gravity method.
@@ -62,23 +64,28 @@ public class Gravity extends Application {
         stage.setHeight(HEIGHT);
         stage.setResizable(false);
 
-        //JavaFX stuff for window name, size, etc
+        // Create Scene
         stage.setTitle("Gravity");
-        Group root = new Group();
+        StackPane root = new StackPane();
+        root.setId("root");
         Scene scene = new Scene(root);
-        scene.setFill(Color.BLACK);
+        scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
         stage.setScene(scene);
+
+        // Create canvas
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // Random planets
-        Random rand = new Random();
-        for (int i = 0; i < 200; i++) {
-            Body planet = new Body(5 + rand.nextInt(20), new Vector(rand.nextInt((int)WIDTH), rand.nextInt((int)HEIGHT)), Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
-            planet.velocity = new Vector(rand.nextInt(50) - 25, rand.nextInt(50) - 25);
-            system.addBody(planet);
-        }
+        // Create instructions
+        Text instructions = new Text("Space to pause\nD to toggle trails\nR to reset");
+        instructions.setId("instructions");
+
+        // Add items to the window
+        root.getChildren().addAll(canvas, instructions);
+        root.setAlignment(instructions, Pos.TOP_RIGHT);
+
+
+        resetSystem();
 
 
         //The start time of the simulation
@@ -141,13 +148,55 @@ public class Gravity extends Application {
         timer.start();
         stage.show();
 
-        // Event handlers
+        // Event handler
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.SPACE) {
-                drawTrails = !drawTrails;
+            switch (event.getCode()) {
+                case SPACE:
+                    togglePaused(timer);
+                    break;
+                case D:
+                    drawTrails = !drawTrails;
+                    break;
+                case R:
+                    resetSystem();
+                    gc.clearRect(0, 0, WIDTH, HEIGHT);
+                    break;
+                default:
+                    return;
             }
         });
 
+    }
+
+    /**
+     * Pauses or resumes the simulation
+     * @param timer
+     */
+    private void togglePaused(AnimationTimer timer) {
+        System.out.println("hello");
+        if (paused) {
+            paused = false;
+            timer.start();
+        } else {
+            paused = true;
+            timer.stop();
+        }
+    }
+
+
+    /**
+     * Resets the simulation to initial conditions
+     */
+    private void resetSystem() {
+        system = new GravitySystem();
+
+        // Random planets
+        Random rand = new Random();
+        for (int i = 0; i < 300; i++) {
+            Body planet = new Body(5 + rand.nextInt(20), new Vector(rand.nextInt((int)WIDTH), rand.nextInt((int)HEIGHT)), Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
+            planet.velocity = new Vector(rand.nextInt(50) - 25, rand.nextInt(50) - 25);
+            system.addBody(planet);
+        }
     }
 
 }
