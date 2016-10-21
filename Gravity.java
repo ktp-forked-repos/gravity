@@ -29,9 +29,6 @@ public class Gravity extends Application {
     //The system in which bodies are stored. This is essentially the simulation universe
     public static GravitySystem system;
 
-    //A variable to store the timestamp of the last frame.
-    static double prevT = 0;
-
     static boolean drawTrails = false;
     static boolean paused = false;
 
@@ -40,11 +37,7 @@ public class Gravity extends Application {
      * @param args
      */
     public static void main(String[] args) {
-
-
         system = new GravitySystem();
-
-
         launch(args);
     }
 
@@ -87,11 +80,6 @@ public class Gravity extends Application {
 
         resetSystem();
 
-
-        //The start time of the simulation
-        final long startNanoTime = java.lang.System.nanoTime();
-
-
         //The simulation loop!
         AnimationTimer timer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
@@ -100,10 +88,6 @@ public class Gravity extends Application {
                 if (!drawTrails) {
                     gc.clearRect(0, 0, WIDTH, HEIGHT);
                 }
-
-
-                // The timestamp of the current frame in seconds, with t=0 at currentNanoTime
-                double t = (currentNanoTime - startNanoTime) / 1_000_000_000.0;
 
                 // List of merged objects
                 ArrayList<Body> merged = new ArrayList<>();
@@ -139,9 +123,6 @@ public class Gravity extends Application {
                     gc.fillOval(body.position.x - body.radius, body.position.y - body.radius, 2 * body.radius, 2 * body.radius);
 
                 }
-
-                prevT = t;
-
             }
         };
 

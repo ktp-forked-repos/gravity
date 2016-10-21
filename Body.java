@@ -91,20 +91,14 @@ public class Body {
     private Vector calculateAcceleration(GravitySystem system) {
         Vector netAcceleration = new Vector(0, 0);
 
-        //Start out by summing all the forces using Fg = GMm/r^2
+        // Start out by summing all the accelerations using Fg = Gm/r^2
         for (Body otherBody : system.getBodies()) {
             if (this.equals(otherBody)) continue;
 
-            // The distance from this to otherBody
             double r = getVectorTo(otherBody).getMagnitude();
-
-            // Here it is! The magnitude of the acceleration of gravity
             double magnitude = system.G * otherBody.mass / (r * r);
 
-            // The force points directly towards otherBody, so we can just scale the vector that points to it.
             Vector acceleration = getVectorTo(otherBody).normalize().scale(magnitude);
-
-            // Add this force to the running total of net force
             netAcceleration = netAcceleration.add(acceleration);
         }
 
@@ -121,20 +115,12 @@ public class Body {
 
         Derivative a, b, c, d;
 
-
-        // a contains the derivatives dx/dt and dv/dt at time t
         a = new Derivative();
         a.dx.x = velocity.x;
         a.dx.y = velocity.y;
         a.dv = calculateAcceleration(Gravity.system);
-
-        // b contains dx/dt and dv/dt at time t = t0 + 0.5dt based on the derivatives found for a
         b = evaluate(dt * 0.5, a);
-
-        // c contains dx/dt and dv/dt at time t = t0 + 0.5dt based on the derivatives found for b
         c = evaluate(dt * 0.5, b);
-
-        // d contains dx/dt and dv/d at time t = t0 + dt based on the derivatives found for c
         d = evaluate(dt, c);
 
         /**
@@ -176,8 +162,6 @@ public class Body {
         // Update position based on dx
         position.x += d.dx.x * dt;
         position.y += d.dx.y * dt;
-
-
 
         // Make the output have dx equal to the new velocity
         Derivative output = new Derivative();
