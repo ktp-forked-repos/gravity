@@ -1,11 +1,13 @@
 # Gravity
 
 Gravity is a Java application that uses RK4 integration to approximate the
-movements of n bodies in a 2-dimensional gravitational system.
+movements of n bodies in a 2-dimensional gravitational system. Collisions cause
+bodies to merge and conserve momentum.
 
 ## Usage
 
-TODO: Add usage
+Run Gravity.java to open the application. Use space to pause, d to toggle drawing,
+and r to reset the simulation.
 
 ## Contributing
 
@@ -20,6 +22,9 @@ Want to help? Here's how:
 ## Authors
 
 * **Kiran Tomlinson**
+
+## Acknowledgements
+* Thanks to Glenn Fiedler of [Gaffer on Games](http://gafferongames.com/game-physics/integration-basics/) for the excellent tutorial on RK4
 
 ## License
 
