@@ -6,7 +6,7 @@ bodies to merge and conserve momentum.
 
 ## Usage
 
-Run Gravity.java to open the application. Use space to pause, d to toggle drawing,
+Run `javac gravity/*.java` to compile Gravity, then `java gravity.Gravity` to run it. Use space to pause, d to toggle drawing,
 and r to reset the simulation.
 
 ## Contributing
